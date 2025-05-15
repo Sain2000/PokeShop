@@ -1,6 +1,6 @@
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 columnas */
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
   padding: 16px;
 }
@@ -11,13 +11,36 @@
   padding: 12px;
   text-align: center;
   background: #fff;
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+  position: relative;
 }
 
-.card:hover {
-  transform: scale(1.05);
-  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+.image-container {
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+  width: 100%;
+  height: auto;
+}
+
+.zoom-image {
+  width: 100%;
+  display: block;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.lens {
+  width: 150px;      /* diameter */
+  height: 150px;     /* diameter */
+  border-radius: 50%; /* stays circle */
+  border: 2px solid #000;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  position: absolute;
+  display: none;
   z-index: 10;
+  background-size: 200% 200%; /* zoom level */
+   pointer-events: none;
 }
