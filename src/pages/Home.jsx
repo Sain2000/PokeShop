@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Styles/Home.css';
+import { useContext } from 'react';
+import { CartContext } from '../context/CartContext';
 
 function Home() {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lensEnabled, setLensEnabled] = useState(true);
+  const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
-    fetch(`https://api.pokemontcg.io/v2/cards?q=set.name:"Prismatic Evolutions"`)
+    fetch(`https://api.pokemontcg.io/v2/cards?q=set.name:"Prismatic Evolutions"`) // request to API and filtering by set
       .then(res => res.json())
       .then(data => {
         setCards(data.data);
@@ -42,7 +45,7 @@ function Home() {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      const zoom = 2;
+      const zoom = 2; // Here you can modify the lens to x2 x3 etc.
       const lensSize = lens.offsetWidth;
 
       let lensX = x - lensSize / 2;
@@ -120,7 +123,9 @@ function Home() {
                 <div className="card-body text-center">
                   <h5 className="card-title">{card.name}</h5>
                   <p className="card-text">Precio: ${card.tcgplayer.prices.holofoil.market.toFixed(2)}</p>
-                  <button className="btn btn-success">Agregar al carrito</button>
+                  <button className="btn btn-success" onClick={() => addToCart(card)}>
+                    Agregar al carrito
+                  </button>
                 </div>
               </div>
             </div>
