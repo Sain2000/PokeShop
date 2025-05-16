@@ -18,7 +18,7 @@ function Navbar() {
             className="me-2"
             style={{ objectFit: 'contain' }}
           />
-          PokéStore
+          PokeShop
         </Link>
 
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
