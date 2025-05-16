@@ -10,6 +10,22 @@ function Home() {
   const [lensEnabled, setLensEnabled] = useState(true);
   const { addToCart } = useContext(CartContext);
 
+  const typeIcons = {
+  Fire: '🔥',
+  Water: '💧',
+  Grass: '🌿',
+  Electric: '⚡',
+  Psychic: '🔮',
+  Fighting: '🥊',
+  Dark: '🌑',
+  Metal: '🔩',
+  Fairy: '✨',
+  Dragon: '🐉',
+  Colorless: '🌈',
+  Lightning: '⚡',
+};
+
+
   useEffect(() => {
     fetch(`https://api.pokemontcg.io/v2/cards?q=set.name:"Prismatic Evolutions"`) // request to API and filtering by set
       .then(res => res.json())
@@ -106,8 +122,9 @@ function Home() {
 
       <div className="row">
         {cards
-          .filter(card => card.tcgplayer?.prices?.holofoil?.market)
-          .sort((a, b) => b.tcgplayer.prices.holofoil.market - a.tcgplayer.prices.holofoil.market)
+          .filter(card => card.tcgplayer?.prices?.holofoil?.market)  // Solo uso cartas que tengan precio disponible
+          .sort((a, b) => b.tcgplayer.prices.holofoil.market - a.tcgplayer.prices.holofoil.market) // Ordeno por precio de mayor a menor
+          .slice(0, 20)  // <-- Solo muestro las 20 cartas más caras para no gastar tantas consultas a la API y que cargue mas rapido al probar el sitio.
           .map(card => (
             <div key={card.id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
               <div className="card h-100 shadow-sm">

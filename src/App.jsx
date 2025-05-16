@@ -7,13 +7,20 @@ import Cart from './pages/Cart';
 
 function App() {
   return (
-      <div>
-        <Navbar/>
+    <div>
+      <Navbar />
+
+      {/* Contenedor con margen superior para que no lo tape la navbar */}
+      <div style={{ marginTop: '70px' }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />      
         </Routes>
-        <Footer/>
       </div>
-  );}
+
+      <Footer />
+    </div>
+  );
+}
+
 export default App;
