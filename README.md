@@ -1,12 +1,33 @@
-# React + Vite
+# 🧢 PokeShop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bienvenido a **PokeShop**, una tienda web de cartas del **juego Pokémon TCG**, donde podés explorar cartas coleccionables, ver sus precios y agregarlas a un carrito de compras simulado con una experiencia visual divertida.
 
-Currently, two official plugins are available:
+![PokéStore Banner](https://img.shields.io/badge/Pokémon%20TCG-API-blue?style=for-the-badge&logo=pokemon)
+![React](https://img.shields.io/badge/React-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-blueviolet?style=for-the-badge&logo=bootstrap&logoColor=white)
+![SweetAlert2](https://img.shields.io/badge/Alerts-SweetAlert2-red?style=for-the-badge)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🌟 Características
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 🃏 Vista de cartas del set **Prismatic Evolutions**
+- 💰 Precios actualizados desde la API oficial de Pokémon TCG
+- 🔍 Efecto lupa/magnificador con opción de activarlo/desactivarlo
+- 🛒 Carrito de compras con:
+  - Conteo por cantidad (`x2`, `x3`, etc.)
+  - Suma y resta de unidades
+  - Total actualizado en la barra de navegación
+- ✅ Notificaciones visuales con **SweetAlert2**
+- 🎨 Estilo visual responsivo con **Bootstrap 5**
+- 🎮 Íconos temáticos como una **Master Ball** en la navbar
+
+---
+
+## 🚀 Instalación
+
+1. Cloná el repositorio:
+
+```bash
+git clone https://github.com/tu-usuario/pokeshop.git
+cd pokeshop
