@@ -124,7 +124,7 @@ function Home() {
         {cards
           .filter(card => card.tcgplayer?.prices?.holofoil?.market)  // Solo uso cartas que tengan precio disponible
           .sort((a, b) => b.tcgplayer.prices.holofoil.market - a.tcgplayer.prices.holofoil.market) // Ordeno por precio de mayor a menor
-          .slice(0, 20)  // <-- Solo muestro las 20 cartas más caras para no gastar tantas consultas a la API y que cargue mas rapido al probar el sitio.
+          .slice(0, 8)  // <-- Solo muestro las 8 cartas más caras para no gastar tantas consultas a la API y que cargue mas rapido al probar el sitio.
           .map(card => (
             <div key={card.id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
               <div className="card h-100 shadow-sm">
