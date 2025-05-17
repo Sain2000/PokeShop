@@ -10,6 +10,11 @@
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
+  /* Añadimos margen inferior para prevenir solapamiento */
+  margin-bottom: 10px;
+  /* Añadimos estas propiedades para el efecto 3D */
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 /* Clase para desactivar efectos */
@@ -24,13 +29,16 @@
   animation: none !important;
 }
 
-/* Efecto holográfico activado solo con hover */
+/* Efecto holográfico activado solo con hover - movimiento hacia el frente */
 .holo-card:hover {
   box-shadow: -3px -3px 3px rgba(38, 230, 247, 0.6), 
               3px 3px 3px rgba(247, 89, 228, 0.6), 
               0 0 6px 2px rgba(255, 231, 89, 0.6), 
               0 25px 20px -10px rgba(0, 0, 0, 0.5);
-  transform: rotate3d(0.5, 1, 0.2, 15deg) scale(1.10);
+  /* Usamos translateZ para dar sensación de movimiento hacia el frente */
+  transform: translateZ(20px) scale(1.05);
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .holo-card::before,
@@ -103,7 +111,10 @@
   }
 }
 
-/* Efecto suave de movimiento al hacer hover */
-.holo-card:hover {
-  animation: none;
+
+/* Configuramos el contenedor para soportar efectos 3D */
+.row .col-12 {
+  margin-bottom: 15px;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }

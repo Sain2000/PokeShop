@@ -16,7 +16,7 @@ function Home() {
     Electric: '⚡',
     Psychic: '🔮',
     Fighting: '🥊',
-    Dark: '🌑',
+    Darkness: '🌑',
     Metal: '🔩',
     Fairy: '✨',
     Dragon: '🐉',

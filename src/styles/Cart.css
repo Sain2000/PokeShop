@@ -1,0 +1,76 @@
+/* Estilos adicionales para el carrito */
+.table-responsive {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Estilos para las filas de la tabla */
+.table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+/* Estilo para el resumen del pedido */
+.card-body {
+  padding: 1.25rem;
+}
+
+/* Efecto hover para las imágenes */
+.img-thumbnail {
+  transition: transform 0.2s ease;
+  border-radius: 5px;
+}
+
+.img-thumbnail:hover {
+  transform: scale(2.5);
+  z-index: 100;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para el botón de cantidad */
+.btn-group .btn {
+  padding: 0.25rem 0.5rem;
+}
+
+.btn-group .disabled {
+  pointer-events: none;
+  cursor: default;
+  min-width: 30px;
+}
+
+/* Animaciones para alertas de cupón */
+.swal2-popup {
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Estilo para el estado vacío del carrito */
+.card.shadow-sm.mb-4 {
+  border: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card.shadow-sm.mb-4:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Mejora visual para el header de la tabla */
+.table-light th {
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+}
+
+/* Estilo para el precio final */
+.fs-5 {
+  color: #28a745;
+}
