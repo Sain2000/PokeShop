@@ -6,9 +6,8 @@ import Swal from 'sweetalert2';
 function Home() {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [effectsEnabled, setEffectsEnabled] = useState(true);
   const { addToCart } = useContext(CartContext);
-
-
 
   const typeIcons = {
     Fire: '🔥',
@@ -54,10 +53,22 @@ function Home() {
     });
   };
 
+  const toggleEffects = () => {
+    setEffectsEnabled(!effectsEnabled);
+  };
+
   if (loading) return <div className="text-center mt-5">Cargando cartas...</div>;
 
   return (
-    <div className="container mt-5 pt-4">
+    <div className={`container mt-5 pt-4 ${effectsEnabled ? '' : 'effects-disabled'}`}>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <button 
+          className={`btn ${effectsEnabled ? 'btn-danger' : 'btn-success'}`}
+          onClick={toggleEffects}
+        >
+          {effectsEnabled ? 'Desactivar Efectos' : 'Activar Efectos'}
+        </button>
+      </div>
       <div className="row justify-content-center">
         {cards
           .filter(card => card.tcgplayer?.prices?.holofoil?.market)
