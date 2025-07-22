@@ -13,6 +13,12 @@
   font-weight: bold;
 }
 
+/* Toast customization */
+.no-navbar-overlap {
+  z-index: 9999 !important;
+  margin-top: 70px !important;
+}
+
 /* Loading state */
 .loading-container {
   display: flex;

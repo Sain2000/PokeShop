@@ -1,6 +1,8 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useContext } from "react";
 import axios from "axios";
 import "../styles/Home.css";
+import { CartContext } from "../context/CartContext";
+import Swal from 'sweetalert2';
 
 const Home = () => {
   const [cards, setCards] = useState([]);
@@ -11,6 +13,23 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const CARDS_PER_PAGE = 4;
+
+  const { addToCart } = useContext(CartContext);
+
+  const typeIcons = {
+    Fire: '🔥',
+    Water: '💧',
+    Grass: '🌿',
+    Electric: '⚡',
+    Psychic: '🔮',
+    Fighting: '🥊',
+    Darkness: '🌑',
+    Metal: '🔩',
+    Fairy: '✨',
+    Dragon: '🐉',
+    Colorless: '🌈',
+    Lightning: '⚡',
+  };
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -116,6 +135,40 @@ const Home = () => {
     setPriceRange({ min: "", max: "" });
     setSortBy("");
     setCurrentPage(1);
+  };
+
+  const handleAddToCart = (card) => {
+    // Adaptamos la carta para que sea compatible con el CartContext
+    const adaptedCard = {
+      id: card.id,
+      name: card.name,
+      types: [card.type], // Convertimos el tipo string a array
+      tcgplayer: {
+        prices: {
+          holofoil: {
+            market: parseFloat(card.price)
+          }
+        }
+      },
+      images: {
+        large: getOptimizedImage(card)
+      }
+    };
+
+    addToCart(adaptedCard);
+    
+    const emoji = typeIcons[card.type] || '';
+    Swal.fire({
+      toast: true,
+      position: 'bottom-end',
+      icon: 'success',
+      title: `¡${card.name} ${emoji} agregado al carrito!`,
+      showConfirmButton: false,
+      timer: 1800,
+      customClass: {
+        popup: 'no-navbar-overlap'
+      }
+    });
   };
 
   if (loading) {
@@ -246,7 +299,10 @@ const Home = () => {
                   <h3 className="card-title">{card.name}</h3>
                   <p className="card-type">Tipo: {card.type}</p>
                   <p className="card-price">${parseFloat(card.price).toFixed(2)}</p>
-                  <button className="add-to-cart-btn">
+                  <button 
+                    className="add-to-cart-btn"
+                    onClick={() => handleAddToCart(card)}
+                  >
                     Agregar al carrito
                   </button>
                 </div>
