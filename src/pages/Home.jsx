@@ -1,98 +1,194 @@
-import { useEffect, useState, useContext } from 'react';
-import '../Styles/Home.css';
-import { CartContext } from '../context/CartContext';
-import Swal from 'sweetalert2';
+import React, { useEffect, useState, useMemo } from "react";
+import axios from "axios";
+import "../styles/Home.css";
 
-function Home() {
+const Home = () => {
   const [cards, setCards] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [effectsEnabled, setEffectsEnabled] = useState(true);
-  const { addToCart } = useContext(CartContext);
-
-  const typeIcons = {
-    Fire: '🔥',
-    Water: '💧',
-    Grass: '🌿',
-    Electric: '⚡',
-    Psychic: '🔮',
-    Fighting: '🥊',
-    Darkness: '🌑',
-    Metal: '🔩',
-    Fairy: '✨',
-    Dragon: '🐉',
-    Colorless: '🌈',
-    Lightning: '⚡',
-  };
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedType, setSelectedType] = useState("");
+  const [priceRange, setPriceRange] = useState({ min: "", max: "" });
+  const [sortBy, setSortBy] = useState("");
 
   useEffect(() => {
-    fetch(`https://api.pokemontcg.io/v2/cards?q=set.name:"Prismatic Evolutions"`)
-      .then(res => res.json())
-      .then(data => {
-        setCards(data.data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error fetching cards:', err);
-        setLoading(false);
-      });
+    const fetchCards = async () => {
+      try {
+        const response = await axios.get(
+          "https://687a4882abb83744b7ec31b5.mockapi.io/api/V1/cards"
+        );
+        setCards(response.data);
+      } catch (error) {
+        console.error("Error al obtener las cartas:", error);
+      }
+    };
+
+    fetchCards();
   }, []);
 
-  const handleAddToCart = (card) => {
-    addToCart(card);
-    const emoji = typeIcons[card.types?.[0]] || '';
-    Swal.fire({
-      toast: true,
-      position: 'bottom-end',
-      icon: 'success',
-      title: `¡${card.name} ${emoji} agregado al carrito!`,
-      showConfirmButton: false,
-      timer: 1800,
-      customClass: {
-        popup: 'no-navbar-overlap'
-      }
+  // Obtener tipos únicos para el filtro
+  const cardTypes = useMemo(() => {
+    const types = cards.map(card => card.type).filter(Boolean);
+    return [...new Set(types)];
+  }, [cards]);
+
+  // Filtrar y ordenar cartas
+  const filteredAndSortedCards = useMemo(() => {
+    let filtered = cards.filter(card => {
+      // Filtro por nombre
+      const matchesName = card.name.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      // Filtro por tipo
+      const matchesType = selectedType === "" || card.type === selectedType;
+      
+      // Filtro por rango de precio
+      const price = parseFloat(card.price);
+      const matchesMinPrice = priceRange.min === "" || price >= parseFloat(priceRange.min);
+      const matchesMaxPrice = priceRange.max === "" || price <= parseFloat(priceRange.max);
+      
+      return matchesName && matchesType && matchesMinPrice && matchesMaxPrice;
     });
-  };
 
-  const toggleEffects = () => {
-    setEffectsEnabled(!effectsEnabled);
-  };
+    // Ordenar cartas
+    if (sortBy) {
+      filtered.sort((a, b) => {
+        switch (sortBy) {
+          case "name-asc":
+            return a.name.localeCompare(b.name);
+          case "name-desc":
+            return b.name.localeCompare(a.name);
+          case "price-asc":
+            return parseFloat(a.price) - parseFloat(b.price);
+          case "price-desc":
+            return parseFloat(b.price) - parseFloat(a.price);
+          case "type":
+            return a.type.localeCompare(b.type);
+          default:
+            return 0;
+        }
+      });
+    }
 
-  if (loading) return <div className="text-center mt-5">Cargando cartas...</div>;
+    return filtered;
+  }, [cards, searchTerm, selectedType, priceRange, sortBy]);
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedType("");
+    setPriceRange({ min: "", max: "" });
+    setSortBy("");
+  };
 
   return (
-    <div className={`container mt-5 pt-4 ${effectsEnabled ? '' : 'effects-disabled'}`}>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <button 
-          className={`btn ${effectsEnabled ? 'btn-danger' : 'btn-success'}`}
-          onClick={toggleEffects}
-        >
-          {effectsEnabled ? 'Desactivar Efectos' : 'Activar Efectos'}
-        </button>
+    <div className="home-container">
+      <h2 className="title">Encuentra tu carta perfecta</h2>
+
+      {/* Sección de filtros */}
+      <div className="filters-container">
+        {/* Búsqueda por nombre */}
+        <div className="filter-group">
+          <label htmlFor="search">Buscar por nombre:</label>
+          <input
+            id="search"
+            type="text"
+            placeholder="Nombre de la carta..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+        </div>
+
+        {/* Filtro por tipo */}
+        <div className="filter-group">
+          <label htmlFor="type-filter">Tipo:</label>
+          <select
+            id="type-filter"
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+            className="filter-select"
+          >
+            <option value="">Todos los tipos</option>
+            {cardTypes.map(type => (
+              <option key={type} value={type}>{type}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Filtro por rango de precio */}
+        <div className="filter-group price-group">
+          <label>Rango de precio:</label>
+          <div className="price-inputs">
+            <input
+              type="number"
+              placeholder="Mín"
+              value={priceRange.min}
+              onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
+              className="price-input"
+            />
+            <span>-</span>
+            <input
+              type="number"
+              placeholder="Máx"
+              value={priceRange.max}
+              onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
+              className="price-input"
+            />
+          </div>
+        </div>
+
+        {/* Ordenar */}
+        <div className="filter-group">
+          <label htmlFor="sort">Ordenar por:</label>
+          <select
+            id="sort"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="filter-select"
+          >
+            <option value="">Sin ordenar</option>
+            <option value="name-asc">Nombre (A-Z)</option>
+            <option value="name-desc">Nombre (Z-A)</option>
+            <option value="price-asc">Precio (menor a mayor)</option>
+            <option value="price-desc">Precio (mayor a menor)</option>
+            <option value="type">Tipo</option>
+          </select>
+        </div>
+
+        {/* Botón limpiar filtros */}
+        <div className="filter-group">
+          <button onClick={clearFilters} className="clear-button">
+            Limpiar filtros
+          </button>
+        </div>
       </div>
-      <div className="row justify-content-center">
-        {cards
-          .filter(card => card.tcgplayer?.prices?.holofoil?.market)
-          .sort((a, b) => b.tcgplayer.prices.holofoil.market - a.tcgplayer.prices.holofoil.market)
-          .slice(0, 8)
-          .map(card => (
-            <div key={card.id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
-              <div
-                className="holo-card"
-                style={{ backgroundImage: `url(${card.images.large})` }}
-              >
-                <div className="card-content text-center">
-                  <h5>{card.name}</h5>
-                  <p>${card.tcgplayer.prices.holofoil.market.toFixed(2)}</p>
-                  <button className="btn btn-success btn-sm" onClick={() => handleAddToCart(card)}>
-                    Agregar al carrito
-                  </button>
-                </div>
+
+      {/* Contador de resultados */}
+      <div className="results-count">
+        {filteredAndSortedCards.length} carta{filteredAndSortedCards.length !== 1 ? 's' : ''} encontrada{filteredAndSortedCards.length !== 1 ? 's' : ''}
+      </div>
+
+      {/* Grid de cartas */}
+      <div className="cards-container">
+        {filteredAndSortedCards.length === 0 ? (
+          <p className="empty-message">
+            {cards.length === 0 ? "Cargando cartas..." : "No se encontraron cartas con los filtros aplicados"}
+          </p>
+        ) : (
+          filteredAndSortedCards.map((card) => (
+            <div 
+              key={card.id} 
+              className="holo-card"
+              style={{ backgroundImage: `url(${card.image})` }}
+            >
+              <div className="card-content">
+                <h3>{card.name}</h3>
+                <p>Tipo: {card.type}</p>
+                <p>Precio: ${card.price}</p>
               </div>
             </div>
-          ))}
+          ))
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default Home;
